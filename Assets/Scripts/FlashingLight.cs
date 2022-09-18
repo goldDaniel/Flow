@@ -18,6 +18,7 @@ public class FlashingLight : BeatListener
         _beatsPassed = 0;
         numHalfBeats = 2;
     }
+
     public override void OnHalfBeat()
     {
         _beatsPassed++;
