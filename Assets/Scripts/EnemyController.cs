@@ -4,26 +4,33 @@ using UnityEngine;
 
 public class EnemyController : BeatListener
 {
-    public float speed = 0.5f;
+    public float speed = 0;
 
+    private uint _numHalfBeats;
     private Transform _transform;
+    private uint _beatsPassed;
 
-    // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
 
         _transform = GetComponent<Transform>();
+        _numHalfBeats = 2;
+    }
+
+    public void Update()
+    {
+        _transform.position += speed * Time.deltaTime * new Vector3(1, 0, 0).normalized;
     }
 
     public override void OnHalfBeat()
     {
-        MoveEnemy();
-    }
-
-    private void MoveEnemy()
-    {
-        _transform.position = DetermineSpeed(2, new Vector3(0, 0, 0), new Vector3(1, -1, 0)) * Time.deltaTime * new Vector3(1, 0, 0);
+        _beatsPassed++;
+        if(_beatsPassed == _numHalfBeats)
+        {
+            speed = DetermineSpeed(8, new Vector3(-10, 0, 0), new Vector3(10, 0, 0));
+            _beatsPassed = 0;
+        }
     }
 
     public float DetermineSpeed(uint numHalfBeats, Vector3 start, Vector3 stop)
