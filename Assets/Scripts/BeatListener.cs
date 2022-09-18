@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class BeatListener : MonoBehaviour
 {
-    private Conductor _conductor;
+    protected Conductor _conductor;
 
     public virtual void Start()
     {

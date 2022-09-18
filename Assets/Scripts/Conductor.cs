@@ -64,4 +64,9 @@ public class Conductor : MonoBehaviour
     {
         return time + _crotchet / 2;
     }
+
+    public float HalfBeatsToSeconds(uint numBeats)
+    {
+        return numBeats * _crotchet;
+    }
 }

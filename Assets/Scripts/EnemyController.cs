@@ -23,6 +23,14 @@ public class EnemyController : BeatListener
 
     private void MoveEnemy()
     {
-        _transform.position += speed * new Vector3(1, 0, 0);
+        _transform.position = DetermineSpeed(2, new Vector3(0, 0, 0), new Vector3(1, -1, 0)) * Time.deltaTime * new Vector3(1, 0, 0);
+    }
+
+    public float DetermineSpeed(uint numHalfBeats, Vector3 start, Vector3 stop)
+    {
+        Vector3 travel = stop - start;
+        float time = _conductor.HalfBeatsToSeconds(numHalfBeats);
+
+        return travel.magnitude / time;
     }
 }
