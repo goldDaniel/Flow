@@ -21,7 +21,7 @@ public class EnemyController : BeatListener
         _transform.position += speed * Time.deltaTime * new Vector3(1, 0, 0).normalized;
     }
 
-    private float DetermineSpeed(uint numHalfBeats, Vector3 start, Vector3 stop)
+    private float DetermineSpeed(int numHalfBeats, Vector3 start, Vector3 stop)
     {
         Vector3 travel = stop - start;
         float time = _conductor.HalfBeatsToSeconds(numHalfBeats);

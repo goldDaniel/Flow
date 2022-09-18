@@ -50,6 +50,11 @@ public class Conductor : MonoBehaviour
         _dspTimeSong = AudioSettings.dspTime;
     }
 
+    public float BeatsToSeconds(float beats)
+    {
+        return beats * _crotchet;
+    }
+
     public float GetSongPosition()
     {
         return (float)(AudioSettings.dspTime - _dspTimeSong) * Song.pitch - offset;
@@ -65,7 +70,7 @@ public class Conductor : MonoBehaviour
         return time + _crotchet / 2;
     }
 
-    public float HalfBeatsToSeconds(uint numBeats)
+    public float HalfBeatsToSeconds(int numBeats)
     {
         return numBeats * _crotchet;
     }
