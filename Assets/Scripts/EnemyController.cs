@@ -28,7 +28,11 @@ public class EnemyController : BeatListener
         _beatsPassed++;
         if(_beatsPassed == _numHalfBeats)
         {
-            speed = DetermineSpeed(8, new Vector3(-10, 0, 0), new Vector3(10, 0, 0));
+            speed = DetermineSpeed(2, new Vector3(0, 0, 0), new Vector3(1, 0, 0));
+        }
+        if(_beatsPassed == _numHalfBeats + 2)
+        {
+            speed = 0;
             _beatsPassed = 0;
         }
     }
