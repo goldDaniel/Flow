@@ -5,28 +5,16 @@ using UnityEngine;
 public class FlashingLight : BeatListener
 {
     public Conductor conductor;
-    public uint numHalfBeats;
 
     private bool _islitup = false;
-    private uint _beatsPassed;
 
     public override void Start()
     {
         base.Start();
         var sprite = GetComponent<SpriteRenderer>();
         sprite.color = Color.white;
-        _beatsPassed = 0;
+        _halfBeatsPassed = 0;
         numHalfBeats = 2;
-    }
-
-    public override void OnHalfBeat()
-    {
-        _beatsPassed++;
-        if (_beatsPassed == numHalfBeats)
-        {
-            Flash();
-            _beatsPassed = 0;
-        }
     }
 
     private void Flash()
@@ -42,5 +30,10 @@ public class FlashingLight : BeatListener
         }
 
         _islitup = !_islitup;
+    }
+
+    protected override void BeatAction()
+    {
+        Flash();
     }
 }
