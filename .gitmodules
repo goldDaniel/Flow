@@ -1,0 +1,3 @@
+[submodule "Assets/External/Path-Creator"]
+	path = Assets/External/Path-Creator
+	url = https://github.com/SebLague/Path-Creator.git
