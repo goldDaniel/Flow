@@ -40,6 +40,4 @@ public class PlayerController : MonoBehaviour
 
         _transform.position += speed * Time.deltaTime * dir;
     }
-
-    
 }
