@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Transform _transform;
-
     [Range(4.0f, 32.0f)] public float speed = 4.0f;
 
-    
+    private Transform _transform;
+
     void Start()
     {
         _transform = GetComponent<Transform>();
@@ -16,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Vector3 dir = new Vector3();
+        Vector3 dir = new();
         if(Input.GetKey("left"))
         {
             dir.x -= 1;
@@ -39,6 +38,6 @@ public class PlayerController : MonoBehaviour
             dir.Normalize();
         }
 
-        _transform.position += dir * speed * Time.deltaTime;
+        _transform.position += speed * Time.deltaTime * dir;
     }
 }
