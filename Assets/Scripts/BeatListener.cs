@@ -1,26 +1,18 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BeatListener : MonoBehaviour
 {
-    public uint numHalfBeats = 2;
-
-    protected uint _halfBeatsPassed;
+    protected BeatType _beatType = BeatType.FULL_BEAT;
 
     public virtual void Start()
     {
+        _beatType = BeatType.FULL_BEAT;
+
         var conductor = Conductor.Get();
-        conductor.RegisterListener(this);
+        conductor.RegisterListener(this, _beatType);
     }
 
-    public virtual void OnHalfBeat()
-    {
-        _halfBeatsPassed++;
-        if (_halfBeatsPassed == numHalfBeats)
-        {
-            BeatAction();
-            _halfBeatsPassed = 0;
-        }
-    }
-
-    protected abstract void BeatAction();
+    public abstract void BeatAction();
 }

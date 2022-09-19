@@ -1,34 +1,58 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class Conductor 
+public enum BeatType
 {
-    private static Conductor _instance;
+    FULL_BEAT,
+    HALF_BEAT,
+    QUARTER_BEAT,
+    EIGHTH_BEAT,
+    SIXTEENTH_BEAT
+}
 
-    public AudioSource Song;
+public class Conductor
+{
+    private class BeatEventHandler
+    {
+        public float lastBeat;
+        public readonly BeatType beatType;
+        public List<BeatListener> listeners = new();
+
+        public BeatEventHandler(BeatType beatType) { this.beatType = beatType; }
+
+        public void RegisterListener(BeatListener listener)
+        {
+            listeners.Add(listener);
+        }
+
+        public void Update()
+        {
+            foreach (var listener in listeners)
+            {
+                listener.BeatAction();
+            }
+        }
+    }
+
+    private AudioSource _song;
 
     private float _bpm;
     private float _crotchet;
     private float offset;
     private double _dspTimeSong;
-    private float _lastBeat;
 
-    private List<BeatListener> _listeners = new();
-
-
-    public static Conductor Get()
+    private BeatEventHandler[] _eventHandlers =
     {
-        if (_instance == null)
-        {
-            _instance = new Conductor();
-        }
+        new BeatEventHandler(BeatType.FULL_BEAT),
+        new BeatEventHandler(BeatType.HALF_BEAT),
+        new BeatEventHandler(BeatType.QUARTER_BEAT),
+        new BeatEventHandler(BeatType.EIGHTH_BEAT),
+        new BeatEventHandler(BeatType.SIXTEENTH_BEAT)
+    };
 
-        return _instance;
-    }
+    private static Conductor _instance;
 
-    private Conductor() 
+    private Conductor()
     {
         Reset();
     }
@@ -39,40 +63,54 @@ public class Conductor
         _crotchet = 60 / _bpm;
         offset = 0;
         _dspTimeSong = 0;
-        _lastBeat = 0;
-        Song = null;
+        _song = null;
+    }
+
+    public static Conductor Get()
+    {
+        if(_instance == null)
+        {
+            _instance = new();
+        }
+
+        return _instance;
     }
 
     public void SetSong(AudioSource source)
     {
-        this.Song = source;
+        _song = source;
     }
 
     public void Play()
     {
-        Song.Play();
+        _song.Play();
         OnSongStart();
     }
 
     public void Update()
     {
-        if(OnHalfBeat(_lastBeat))
+        foreach(var handler in _eventHandlers)
         {
-            foreach(var listener in _listeners)
+            if (OnBeat(handler.lastBeat, handler.beatType))
             {
-                listener.OnHalfBeat();
+                handler.Update();
+                handler.lastBeat = NextBeat(handler.lastBeat, handler.beatType);
             }
-
-            _lastBeat = IncrementLastBeat(_lastBeat);
         }
     }
 
-    public void RegisterListener(BeatListener listener)
+    public void RegisterListener(BeatListener listener, BeatType beatType)
     {
-        _listeners.Add(listener);
+        foreach(var handler in _eventHandlers)
+        {
+            if(handler.beatType == beatType)
+            {
+                handler.RegisterListener(listener);
+            }
+        }
     }
 
-    public void OnSongStart()
+    private void OnSongStart()
     {
         _dspTimeSong = AudioSettings.dspTime;
     }
@@ -82,23 +120,32 @@ public class Conductor
         return beats * _crotchet;
     }
 
-    public float GetSongPosition()
+    private float GetSongPosition()
     {
-        return (float)(AudioSettings.dspTime - _dspTimeSong) * Song.pitch - offset;
+        return (float)(AudioSettings.dspTime - _dspTimeSong) - offset;
     }
 
-    public bool OnHalfBeat(float check)
+    private bool OnBeat(float check, BeatType beatType)
     {
-        return check + _crotchet / 2 < GetSongPosition();
+        return check + GetBeat(beatType) <= GetSongPosition();
     }
 
-    public float IncrementLastBeat(float time)
+    private float NextBeat(float time, BeatType beatType)
     {
-        return time + _crotchet / 2;
+        return time + GetBeat(beatType);
     }
 
-    public float HalfBeatsToSeconds(int numBeats)
+    private float GetBeat(BeatType beatType)
     {
-        return numBeats * _crotchet;
+        switch (beatType)
+        {
+            case (BeatType.FULL_BEAT): return _crotchet;
+            case (BeatType.HALF_BEAT): return _crotchet / 2;
+            case (BeatType.QUARTER_BEAT): return _crotchet / 4;
+            case (BeatType.EIGHTH_BEAT): return _crotchet / 8;
+            case (BeatType.SIXTEENTH_BEAT): return _crotchet / 16;
+        }
+
+        return 0;
     }
 }
