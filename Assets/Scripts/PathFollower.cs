@@ -6,12 +6,13 @@ using UnityEngine;
 public class PathFollower : MonoBehaviour
 {
     public PathCreator pathCreator;
-    public Conductor conductor;
 
     private float _distanceTravelledAlongPath = 0;
 
     void Update()
     {
+        var conductor = Conductor.Get();
+
         int beatsToComplete = pathCreator.bezierPath.NumSegments;
         float secondsToTravelPath = conductor.BeatsToSeconds(beatsToComplete);
 

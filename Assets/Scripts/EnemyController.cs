@@ -23,8 +23,10 @@ public class EnemyController : BeatListener
 
     private float DetermineSpeed(int numHalfBeats, Vector3 start, Vector3 stop)
     {
+        var conductor = Conductor.Get();
+
         Vector3 travel = stop - start;
-        float time = _conductor.HalfBeatsToSeconds(numHalfBeats);
+        float time = conductor.HalfBeatsToSeconds(numHalfBeats);
 
         return travel.magnitude / time;
     }

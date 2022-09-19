@@ -1,9 +1,12 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Conductor : MonoBehaviour
+
+public class Conductor 
 {
+    private static Conductor _instance;
+
     public AudioSource Song;
 
     private float _bpm;
@@ -14,15 +17,39 @@ public class Conductor : MonoBehaviour
 
     private List<BeatListener> _listeners = new();
 
-    public void Start()
+
+    public static Conductor Get()
+    {
+        if (_instance == null)
+        {
+            _instance = new Conductor();
+        }
+
+        return _instance;
+    }
+
+    private Conductor() 
+    {
+        Reset();
+    }
+
+    public void Reset()
     {
         _bpm = 156;
         _crotchet = 60 / _bpm;
         offset = 0;
         _dspTimeSong = 0;
         _lastBeat = 0;
+        Song = null;
+    }
 
-        Song = GetComponent<AudioSource>();
+    public void SetSong(AudioSource source)
+    {
+        this.Song = source;
+    }
+
+    public void Play()
+    {
         Song.Play();
         OnSongStart();
     }
