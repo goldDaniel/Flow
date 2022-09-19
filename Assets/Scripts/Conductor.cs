@@ -35,6 +35,7 @@ public class Conductor
     }
 
     private AudioSource _song;
+    public bool isPlaying;
 
     private float _bpm;
     private float _crotchet;
@@ -64,6 +65,7 @@ public class Conductor
         offset = 0;
         _dspTimeSong = 0;
         _song = null;
+        isPlaying = false;
     }
 
     public static Conductor Get()
@@ -113,6 +115,7 @@ public class Conductor
     private void OnSongStart()
     {
         _dspTimeSong = AudioSettings.dspTime;
+        isPlaying = true;
     }
 
     public float BeatsToSeconds(float beats)

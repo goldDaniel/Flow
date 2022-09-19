@@ -4,14 +4,12 @@ using UnityEngine;
 
 public abstract class BeatListener : MonoBehaviour
 {
-    protected BeatType _beatType = BeatType.FULL_BEAT;
+    public BeatType beatType = BeatType.FULL_BEAT;
 
     public virtual void Start()
     {
-        _beatType = BeatType.FULL_BEAT;
-
         var conductor = Conductor.Get();
-        conductor.RegisterListener(this, _beatType);
+        conductor.RegisterListener(this, beatType);
     }
 
     public abstract void BeatAction();

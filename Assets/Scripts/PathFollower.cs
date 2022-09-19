@@ -11,13 +11,16 @@ public class PathFollower : MonoBehaviour
     {
         var conductor = Conductor.Get();
 
-        int beatsToComplete = pathCreator.bezierPath.NumSegments;
-        float secondsToTravelPath = conductor.BeatsToSeconds(beatsToComplete);
+        if (conductor.isPlaying)
+        {
+            int beatsToComplete = pathCreator.bezierPath.NumSegments;
+            float secondsToTravelPath = conductor.BeatsToSeconds(beatsToComplete);
 
-        float step = pathCreator.path.length / secondsToTravelPath / 2;
+            float step = pathCreator.path.length / secondsToTravelPath;
 
-        _distanceTravelledAlongPath += step * Time.deltaTime;
+            _distanceTravelledAlongPath += step * Time.deltaTime;
 
-        transform.position = pathCreator.path.GetPointAtDistance(_distanceTravelledAlongPath);
+            transform.position = pathCreator.path.GetPointAtDistance(_distanceTravelledAlongPath);
+        }
     }
 }

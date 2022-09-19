@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class FlashingLight : BeatListener
 {
+    private SpriteRenderer _sprite;
     private bool _islitup = false;
 
     public override void Start()
     {
         base.Start();
-        var sprite = GetComponent<SpriteRenderer>();
-        sprite.color = Color.white;
+        _sprite = GetComponent<SpriteRenderer>();
+        _sprite.color = Color.white;
     }
 
     private void Flash()
     {
-        var sprite = GetComponent<SpriteRenderer>();
         if(_islitup)
         {
-            sprite.color = Color.yellow;
+            _sprite.color = Color.yellow;
         }
         else
         {
-            sprite.color = Color.clear;
+            _sprite.color = Color.clear;
         }
 
         _islitup = !_islitup;
