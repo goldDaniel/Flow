@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class FlashingLight : BeatListener
 {
-    public Conductor conductor;
-
     private bool _islitup = false;
 
     public override void Start()

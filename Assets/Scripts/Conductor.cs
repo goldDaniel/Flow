@@ -1,6 +1,3 @@
-using Assets.Scripts;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,7 +34,7 @@ public class Conductor
         }
     }
 
-    public AudioSource Song;
+    private AudioSource _song;
 
     private float _bpm;
     private float _crotchet;
@@ -57,10 +54,16 @@ public class Conductor
 
     private Conductor()
     {
+        Reset();
+    }
+
+    public void Reset()
+    {
         _bpm = 156;
         _crotchet = 60 / _bpm;
         offset = 0;
         _dspTimeSong = 0;
+        _song = null;
     }
 
     public static Conductor Get()
@@ -71,6 +74,17 @@ public class Conductor
         }
 
         return _instance;
+    }
+
+    public void SetSong(AudioSource source)
+    {
+        _song = source;
+    }
+
+    public void Play()
+    {
+        _song.Play();
+        OnSongStart();
     }
 
     public void Update()

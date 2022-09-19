@@ -221,7 +221,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathCreator: {fileID: 838367707}
-  conductor: {fileID: 2142501567}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,8 +530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af58c7ce2c3e4e408eb96f67ab730e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numHalfBeats: 0
-  conductor: {fileID: 2142501567}
 --- !u!212 &1038915418
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -609,8 +606,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2142501568}
-  - component: {fileID: 2142501567}
   - component: {fileID: 2142501566}
+  - component: {fileID: 2142501569}
   m_Layer: 0
   m_Name: Conductor
   m_TagString: Untagged
@@ -714,19 +711,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2142501567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2142501565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff48cfa258937b148b7f57c29c946dff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Song: {fileID: 2142501566}
 --- !u!4 &2142501568
 Transform:
   m_ObjectHideFlags: 0
@@ -742,3 +726,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2142501569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142501565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfd8589206a0ab64dbb6bcde89c26628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 2142501566}
