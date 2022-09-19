@@ -5,7 +5,6 @@ using UnityEngine;
 public class ConductorCoordinator: MonoBehaviour
 {
     public AudioSource audioSource; 
-
     void Start()
     {
         var conductor = Conductor.Get();
