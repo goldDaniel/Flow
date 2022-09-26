@@ -34,13 +34,18 @@ public class Conductor
         }
     }
 
-    private AudioSource _song;
     public bool isPlaying;
+    public float crotchet;
+
+    private AudioSource _song;
 
     private float _bpm;
-    private float _crotchet;
     private float offset;
-    private double _dspTimeSong;
+    private double _startTick;
+    private double _sampleRate;
+    private double _nextTick;
+
+    private List<BeatEventHandler> _readyEvents = new();
 
     private BeatEventHandler[] _eventHandlers =
     {
@@ -61,9 +66,8 @@ public class Conductor
     public void Reset()
     {
         _bpm = 156;
-        _crotchet = 60 / _bpm;
+        crotchet = 60 / _bpm;
         offset = 0;
-        _dspTimeSong = 0;
         _song = null;
         isPlaying = false;
     }
@@ -89,14 +93,38 @@ public class Conductor
         OnSongStart();
     }
 
+    private void OnSongStart()
+    {
+        _startTick = AudioSettings.dspTime;
+        _sampleRate = AudioSettings.outputSampleRate;
+        _nextTick = _startTick * _sampleRate;
+        isPlaying = true;
+    }
+
     public void Update()
+    {
+        lock(_readyEvents)
+        {
+            foreach(var handler in _readyEvents)
+            {
+                handler.Update();
+            }
+
+            _readyEvents.Clear();
+        }
+    }
+
+    public void AudioTick()
     {
         foreach(var handler in _eventHandlers)
         {
             if (OnBeat(handler.lastBeat, handler.beatType))
             {
-                handler.Update();
-                handler.lastBeat = NextBeat(handler.lastBeat, handler.beatType);
+                lock (_readyEvents)
+                {
+                    _readyEvents.Add(handler);
+                    handler.lastBeat = NextBeat(handler.lastBeat, handler.beatType);
+                }
             }
         }
     }
@@ -112,20 +140,14 @@ public class Conductor
         }
     }
 
-    private void OnSongStart()
-    {
-        _dspTimeSong = AudioSettings.dspTime;
-        isPlaying = true;
-    }
-
     public float BeatsToSeconds(float beats)
     {
-        return beats * _crotchet;
+        return beats * crotchet;
     }
 
     private float GetSongPosition()
     {
-        return (float)(AudioSettings.dspTime - _dspTimeSong) - offset;
+        return (float)(AudioSettings.dspTime - _startTick) - offset;
     }
 
     private bool OnBeat(float check, BeatType beatType)
@@ -142,11 +164,11 @@ public class Conductor
     {
         switch (beatType)
         {
-            case (BeatType.FULL_BEAT): return _crotchet;
-            case (BeatType.HALF_BEAT): return _crotchet / 2;
-            case (BeatType.QUARTER_BEAT): return _crotchet / 4;
-            case (BeatType.EIGHTH_BEAT): return _crotchet / 8;
-            case (BeatType.SIXTEENTH_BEAT): return _crotchet / 16;
+            case (BeatType.FULL_BEAT): return crotchet;
+            case (BeatType.HALF_BEAT): return crotchet / 2;
+            case (BeatType.QUARTER_BEAT): return crotchet / 4;
+            case (BeatType.EIGHTH_BEAT): return crotchet / 8;
+            case (BeatType.SIXTEENTH_BEAT): return crotchet / 16;
         }
 
         return 0;
